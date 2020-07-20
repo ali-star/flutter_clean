@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_app/data/model/account.dart';
 import 'data/remote/network_service/network_service.dart';
+import 'package:flutter/foundation.dart';
 
 NetworkService networkService;
 
@@ -58,6 +62,28 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  void _login() async {
+    Response response = await networkService.getDio().post(
+      "/identity/v1/Auth/SaveLoginUser",
+      data: {"userName": "2500080837", "password": "456789", "role": "Shop"}
+    );
+
+    final mJson = json.decode(response.data);
+    var map = Map<String, dynamic>.from(mJson);
+
+    Account account = new Account();
+    account.accessToken = map["Data"]["access_token"];
+    account.refreshToken = map["Data"]["refresh_token"];
+    account.expiresIn = map["Data"]["expires_in"];
+    account.tokenExpiresOn = new DateTime.now()
+        .millisecondsSinceEpoch * account.expiresIn.toInt() * 1000;
+
+    print(account.accessToken);
+    print(account.refreshToken);
+    print(account.expiresIn);
+    print(account.tokenExpiresOn);
+  }
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -114,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _login,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

@@ -6,7 +6,7 @@ class TokenInterceptor extends InterceptorsWrapper {
 
   TokenInterceptor() {
     BaseOptions options = new BaseOptions(
-      baseUrl: "",
+      baseUrl: "https://api.3soot.ir/",
       connectTimeout: 20000,
       receiveTimeout: 20000
     );

@@ -7,7 +7,7 @@ class NetworkService {
   TokenInterceptor _tokenInterceptor;
 
   NetworkService() {
-    _dio = _initDio("baseUrl");
+    _dio = _initDio("https://api.3soot.ir/");
   }
 
   Dio _initDio(String baseUrl) {
