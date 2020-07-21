@@ -31,44 +31,6 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
       print(account.accessToken);
       options.headers["Authorization"] = "Bearer " + account.accessToken;
     }
-    /*print("onRequest");
-
-    var response = await super.onRequest(options);
-
-    if (response is DioError) {
-      print("response is DioError");
-      if (response.response.statusCode == 401) {
-        if (account != null) {
-          if (account.accessToken != null && account.tokenExpiresOn >
-              new DateTime.now().millisecondsSinceEpoch) {
-            options.headers["Authorization"] = "Bearer " + account.accessToken;
-            return options;
-          } else {
-            _mainDio.lock();
-
-            print("Refreshing Token...");
-            Response response = await _dio.get(
-                "/identity/v1/Auth/authRefreshTokenUser",
-                options: Options(
-                    headers: {"RefreshToken": account.refreshToken}));
-
-            final mJson = json.decode(response.data);
-            var map = Map<String, dynamic>.from(mJson);
-
-            account.accessToken = map["Data"]["access_token"];
-            account.refreshToken = map["Data"]["refresh_token"];
-            account.expiresIn = map["Data"]["expires_in"];
-            account.tokenExpiresOn = new DateTime.now()
-                .millisecondsSinceEpoch + (account.expiresIn.toInt() * 1000);
-
-            _mainDio.unlock();
-
-            options.headers["Authorization"] = "Bearer " + account.accessToken;
-            return options;
-          }
-        }
-      }
-    }*/
 
     return super.onRequest(options);
   }
@@ -83,8 +45,7 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
     Account account = AccountManager().getAccount();
     if (err.response.statusCode == 401) {
       if (account != null) {
-        if (/*account.accessToken != null && account.tokenExpiresOn >
-            new DateTime.now().millisecondsSinceEpoch*/ false) {
+        if (account.accessToken != null && account.tokenExpiresOn > new DateTime.now().millisecondsSinceEpoch) {
           var options = err.response.request;
           options.headers["Authorization"] = "Bearer " + account.accessToken;
 
