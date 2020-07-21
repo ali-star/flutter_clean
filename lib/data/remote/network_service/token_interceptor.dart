@@ -118,20 +118,4 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
     return super.onError(err);
   }
 
-/*static Future<Response<dynamic>> retry(
-      Dio dio, RequestOptions requestOptions) async {
-    print('retry path:${requestOptions.path}');
-    final Options options = Options(
-      method: requestOptions.method,
-      headers: requestOptions.headers,
-    );
-    isRetryCall = true;
-    return dio
-        .request<dynamic>(requestOptions.path,
-        data: requestOptions.data,
-        queryParameters: requestOptions.queryParameters,
-        options: options)
-        .whenComplete(() => isRetryCall = false);
-  }*/
-
 }
