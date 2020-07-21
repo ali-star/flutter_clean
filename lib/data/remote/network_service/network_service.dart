@@ -1,14 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_app/data/account_manager.dart';
+import 'package:flutter_app/data/model/account.dart';
 import 'package:flutter_app/data/remote/network_service/token_interceptor.dart';
 
 class NetworkService {
 
-  Dio _dio;
-  TokenInterceptor _tokenInterceptor;
+  static final NetworkService _networkService = NetworkService._internal();
 
-  NetworkService() {
-    _dio = _initDio("https://api.3soot.ir/");
+  factory NetworkService() {
+    return _networkService;
   }
+
+  Dio _dio;
+  AuthenticationInterceptor _tokenInterceptor;
 
   Dio _initDio(String baseUrl) {
     BaseOptions baseOptions = new BaseOptions(
@@ -19,14 +23,18 @@ class NetworkService {
 
     Dio dio = new Dio(baseOptions);
 
-    _tokenInterceptor = new TokenInterceptor();
+    _tokenInterceptor = new AuthenticationInterceptor(dio);
     dio.interceptors.add(_tokenInterceptor);
 
-    return new Dio(baseOptions);
+    return dio;
   }
 
   Dio getDio() {
     return _dio;
+  }
+
+  NetworkService._internal() {
+    _dio = _initDio("http://192.168.10.45:8385/");
   }
 
 }
